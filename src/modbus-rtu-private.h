@@ -76,11 +76,11 @@ typedef struct _modbus_rtu {
     /* Save old termios settings */
     struct termios old_tios;
     int serial_mode;
-    int usage_rts;
+    int use_rts;
 #endif
 } modbus_rtu_t;
 
-/* Time waited beetween the RTS switch before transmit data o after transmit data before to read */
+/* Time waited beetween the RTS switch before transmit data or after transmit data before to read */
 #define TIME_BETWEEN_RTS_SWITCH  10000
 void _modbus_rtu_setrts(int fd, int on);
 
