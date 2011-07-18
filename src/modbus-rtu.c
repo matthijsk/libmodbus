@@ -698,10 +698,13 @@ static int _modbus_rtu_connect(modbus_t *ctx)
     if (tcsetattr(ctx->s, TCSANOW, &tios) < 0) {
         return -1;
     }
+#endif
 
+#if HAVE_DECL_TIOCSRS485
     /* The RS232 mode has been set by default */
     ctx_rtu->serial_mode = MODBUS_RTU_RS232;
 #endif
+
     return 0;
 }
 
@@ -745,8 +748,16 @@ int modbus_rtu_set_serial_mode(modbus_t *ctx, int mode)
 
 int modbus_rtu_get_serial_mode(modbus_t *ctx) {
     if (ctx->backend->backend_type == _MODBUS_BACKEND_TYPE_RTU) {
+#if HAVE_DECL_TIOCSRS485
         modbus_rtu_t *ctx_rtu = ctx->backend_data;
         return ctx_rtu->serial_mode;
+#else
+        if (ctx->debug) {
+            fprintf(stderr, "This function isn't supported on your platform\n");
+        }
+        errno = ENOTSUP;
+        return -1;
+#endif
     } else {
         errno = EINVAL;
         return -1;
