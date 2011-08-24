@@ -37,6 +37,10 @@
 
 #define _MODBUS_RTU_CHECKSUM_LENGTH    2
 
+/* Time waited beetween the RTS switch before transmit data or after transmit
+   data before to read */
+#define _MODBUS_RTU_TIME_BETWEEN_RTS_SWITCH 10000
+
 #if defined(_WIN32)
 #define ENOTSUP WSAEOPNOTSUPP
 
@@ -80,6 +84,7 @@ typedef struct _modbus_rtu {
 #endif
 #if HAVE_DECL_TIOCSRS485
     int serial_mode;
+    int rts;
 #endif
 } modbus_rtu_t;
 
